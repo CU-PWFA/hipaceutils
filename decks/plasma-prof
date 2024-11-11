@@ -1,0 +1,60 @@
+max_step = 1000
+amr.n_cell = 1023 1023 960
+
+amr.max_level = 0
+
+hipace.max_time = 0.7/clight
+diagnostic.output_period = 30
+hipace.verbose = 1
+
+hipace.numprocs_x = 1
+hipace.numprocs_y = 1
+
+hipace.depos_order_xy = 2
+hipace.dt = adaptive
+hipace.nt_per_betatron = 30
+
+
+geometry.is_periodic = true  true  false  # Is periodic?
+geometry.prob_lo     = -180.e-6 -180.e-6 -300.e-6  
+geometry.prob_hi     =  180.e-6  180.e-6  100.e-6
+
+beams.names = driver
+
+my_constants.z_center= 0
+my_constants.dx_dz= 0
+my_constants.dy_dz= 0
+my_constants.lens_to_plasma= 1.44
+my_constants.beam_jitter_x= 0
+my_constants.beam_jitter_y= 0
+my_constants.x_center= dx_dz*lens_to_plasma+ beam_jitter_x
+my_constants.y_center= dy_dz*lens_to_plasma+ beam_jitter_y
+
+driver.position_std = 20e-6 20e-6 35e-6
+driver.position_mean = "x_center+(z-z_center)*dx_dz" "y_center+(z-z_center)*dy_dz" "z_center"
+driver.injection_type = fixed_weight
+driver.num_particles = 1000000
+driver.total_charge = 1.5e-9
+my_constants.uz= 20000.
+driver.u_mean = dx_dz*uz dy_dz*uz uz
+driver.u_std = 0.5 0.5 200.
+driver.do_symmetrize = 0
+
+plasmas.names = electron ion
+
+electron.density(x,y,z) = 5.e22
+electron.ppc = 5 5
+electron.u_mean = 0.0 0.0 0.
+electron.element = electron
+electron.radius = 27.5e-6
+electron.do_symmetrize = 1
+electron.temperature_in_ev= 15
+
+ion.density(x,y,z) = 5.e22
+ion.ppc = 1 1
+ion.u_mean = 0.0 0.0 0.
+ion.element = H
+ion.do_symmetrize = 1
+
+diagnostic.diag_type = xz
+
