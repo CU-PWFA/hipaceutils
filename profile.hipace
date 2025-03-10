@@ -1,0 +1,17 @@
+# Example profile.hipace for use on the Great Lakes cluster at the University of Michigan
+
+# Required dependencies
+module load cmake
+module load gcc
+module load cuda
+module load hdf5
+module load openmpi
+
+# Optimize CUDA compilation for A100
+export AMREX_CUDA_ARCH=8.0
+
+# Compiler environment hints
+export CC=gcc
+export CXX=g++
+export CUDACXX=nvcc
+export CUDAHOSTCXX=${CXX}
