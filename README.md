@@ -179,7 +179,6 @@ You can get familiar with the HiPACE++ input file format in the official documen
 
 #SBATCH --partition=aa100
 #SBATCH --job-name=hipace-example
-#SBATCH --output=hipace-example.%j.out
 #SBATCH --qos=normal
 #SBATCH --time=02:00:00
 #SBATCH --qos=normal
