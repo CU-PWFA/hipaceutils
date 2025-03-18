@@ -19,8 +19,8 @@ Installation instructions for certain clusters are not included in the HiPACE++ 
 
 I've written documentation for the following HPC machines:
 
-- [Great Lakes @ UofM](#-great-lakes-uofm)
-- [CURC @ CU Boulder](#-curc-cu-boulder)
+- [Great Lakes @ UofM](#-great-lakes--uofm)
+- [CURC @ CU Boulder](#-curc--cu-boulder)
 
 ## Great Lakes @ UofM
 
