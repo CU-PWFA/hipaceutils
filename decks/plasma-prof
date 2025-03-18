@@ -14,8 +14,8 @@ hipace.depos_order_xy = 2
 hipace.dt = adaptive
 hipace.nt_per_betatron = 30
 
-
-geometry.is_periodic = true  true  false  # Is periodic?
+boundary.field = Dirichlet
+boundary.particle = Absorbing
 geometry.prob_lo     = -180.e-6 -180.e-6 -300.e-6  
 geometry.prob_hi     =  180.e-6  180.e-6  100.e-6
 

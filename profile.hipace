@@ -7,8 +7,8 @@ module load cuda
 module load hdf5
 module load openmpi
 
-# Optimize CUDA compilation for A100
-export AMREX_CUDA_ARCH=8.0
+# Optimize CUDA compilation for V100
+export AMREX_CUDA_ARCH=7.0
 
 # Compiler environment hints
 export CC=gcc

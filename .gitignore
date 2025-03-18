@@ -1,0 +1,5 @@
+# Job output files
+.out
+
+# Jupyter Notebook
+.ipynb_checkpoints
