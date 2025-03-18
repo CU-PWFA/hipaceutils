@@ -130,6 +130,8 @@ Note that this example simulation runs on 4 GPUs, since ``` --nodes=2 ``` and ``
 
 ## CURC @ CU Boulder
 
+Before proceeding with the documentation, I’d like to mention that although I worked on this cluster, it was only for a brief period. I’ve updated the job script I previously used when I did have access, but I’m unsure if it will work as I never actually ran it on CURC. Nonetheless, it should be sufficient to help you get started.
+
 Log in with ``` ssh <yourid>@login.rc.colorado.edu ```.
 
 ### Building for GPU
@@ -182,23 +184,52 @@ You can get familiar with the HiPACE++ input file format in the official documen
 #SBATCH --time=02:00:00
 #SBATCH --qos=normal
 #SBATCH --nodes=2
-#SBATCH --ntasks-per-node=1
-#SBATCH --gres=gpu:1
+#SBATCH --ntasks-per-node=2
+#SBATCH --gres=gpu:2
 #SBATCH --mail-user=<yourid>@colorado.edu
 
-# path to executable and input script
-EXE=/path/to/hipace/executable
-INPUTS=/path/to/input/file
-
-# GPU-aware MPI
-export MPICH_GPU_SUPPORT_ENABLED=1
-
-# expose one GPU per MPI rank
-export CUDA_VISIBLE_DEVICES=$SLURM_LOCALID
-
-# run everything
-srun ${EXE} ${INPUTS}
+# The application(s) to execute along with its input arguments and options:                                                                                                 
+                                                                                                                                                                            
+##################################################################################
+# EDIT BELOW HERE                                                                                                                                                           
+##################################################################################                                                                                          
+                                                                                                                                                                            
+# Select the input file, root directory, and data directory                                                                                                                 
+export INPUTFILE=/path/to/input/file                                                                                                                                        
+                                                                                                                                                                            
+export ROOT_DIR=/path/to/hipace/root/directory                                                                                                                              
+export DATA_DIR=/path/to/data/output/directory                                                                                                                              
+                                                                                                                                                                            
+# Name of run (OPTIONAL; can be blank, no space)                                                                                                                            
+RUNTITLE=test                                                                                                                                                               
+                                                                                                                                                                            
+# GPU settings                                                                                                                                                              
+export MPICH_GPU_SUPPORT_ENABLED=1              # GPU-aware MPI                                                                                                             
+export CUDA_VISIBLE_DEVICES=$SLURM_LOCALID      # Expose one GPU per MPI rank                                                                                               
+                                                                                                                                                                            
+#################################################################################                                                                                           
+                                                                                                                                                                            
+# Path to HiPACE++ executable and new directory name                                                                                                                        
+export EXEC=hipace.MPI.CUDA.DP.LF                                                                                                                                           
+export DIR_NAME=hip_${RUNTITLE}_${SLURM_JOB_ID}%.rc.colorado.edu                                                                                                        
+                                                                                                                                                                            
+# Set directory up to output data                                                                                                                                           
+mkdir ${DATA_DIR}/${DIR_NAME}                                                                                                                                               
+cp -f ${ROOT_DIR}/build/bin/${EXEC} ${DATA_DIR}/${DIR_NAME}                                                                                                                 
+cp -f ${INPUTFILE} ${DATA_DIR}/${DIR_NAME}/hi-stdin                                                                                                                         
+                                                                                                                                                                            
+cd ${DATA_DIR}/${DIR_NAME}                                                                                                                                                  
+                                                                                                                                                                            
+# Add text file for notes                                                                                                                                                   
+touch notes                                                                                                                                                                 
+echo run did not finish >> notes                                                                                                                                            
+                                                                                                                                                                            
+# Run code                                                                                                                                                                  
+srun ${EXEC} ${INPUTFILE}                                                                                                                                                   
+                                                                                                                                                                            
+# Remove executable and notes if job ran successfully
+rm -f ${EXEC} notes
 ```
 
-Note that this example simulation runs on 2 GPUs, since ``` --nodes=2 ``` and ``` --gres=gpu:1 ``` yields two nodes with one GPU each.
+Note that this example simulation runs on 2 GPUs, since ``` --nodes=2 ``` and ``` --gres=gpu:2 ``` yields two nodes with two GPUs each.
 
