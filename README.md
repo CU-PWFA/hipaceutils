@@ -17,10 +17,10 @@ This repository contains input decks, analysis scripts, Jupyter notebooks, and e
 
 Installation instructions for certain clusters are not included in the HiPACE++ documentation. For clusters I've worked with that aren't covered there, I provide installation details for here. If your cluster isn't listed here, refer to the [official HiPACE++ documentation](https://hipace.readthedocs.io/en/latest/building/hpc.html).
 
-I've written documentation for the following HPC Machines:
+I've written documentation for the following HPC machines:
 
-- [Great Lakes @ UofM](#great-lakes-@-uofm)
-- [CURC @ CU Boulder](#curc-@-cu-boulder)
+- [Great Lakes @ UofM](#-great-lakes-@-uofm)
+- [CURC @ CU Boulder](#-curc-@-cu-boulder)
 
 ## Great Lakes @ UofM
 
@@ -80,7 +80,7 @@ You can learn about the HiPACE++ input file format in the [Get Started](https://
 #SBATCH --export=ALL
 #SBATCH --partition=gpu
 
-#SBATCH --mail-user=lghart@umich.edu
+#SBATCH --mail-user=<yourid>@umich.edu
 #SBATCH --mail-type=BEGIN,END
 
 # The application(s) to execute along with its input arguments and options:
@@ -90,10 +90,10 @@ You can learn about the HiPACE++ input file format in the [Get Started](https://
 ##################################################################################
 
 # Select the input file, root directory, and data directory
-export INPUTFILE=~/hipaceutils/decks/plasma-prof
+export INPUTFILE=/path/to/input/file
 
-export ROOT_DIR=~/hipace
-export DATA_DIR=/scratch/agrt_root/agrt98/lghart/hiresults
+export ROOT_DIR=/path/to/hipace/root/directory
+export DATA_DIR=/path/to/data/output/directory
 
 # Name of run (OPTIONAL; can be blank, no space)
 RUNTITLE=test
@@ -136,7 +136,7 @@ Log in with ``` ssh <yourid>@login.rc.colorado.edu ```.
 
 Create a ``` profile.hipace ``` and ``` source ``` it whenever you log in and want to work with HiPACE++. This repository includes an example profile [here](https://github.com/leahghartman/hipaceutils/blob/main/profile.hipace) (please note that the CUDA optimization line in this file is specific to Great Lakes, not CURC), but here's a copy-and-paste version for convenience:
 
-```
+```bash
 # Required dependencies
 module load cmake
 module load gcc
@@ -156,7 +156,7 @@ export CUDAHOSTCXX=${CXX}
 
 Download HiPACE++ from GitHub (the first time, and whenever you want the latest version):
 
-```
+```bash
 git clone https://github.com/Hi-PACE/hipace.git $HOME/hipace # or any other path you prefer
 ```
 
@@ -170,9 +170,9 @@ cmake -S . -B build -DHiPACE_COMPUTE=CUDA
 cmake --build build -j 16
 ```
 
-You can get familiar with the HiPACE++ input file format in the official documentation's [Get Started](https://hipace.readthedocs.io/en/latest/run/get_started.html) section, to prepare an input file that suits your simulation needs. After setting up your input file (which I have an example of [here](https://github.com/leahghartman/hipaceutils/blob/main/decks/plasma-prof)), modify the example ob script below and use it to submit a simulation.
+You can get familiar with the HiPACE++ input file format in the official documentation's [Get Started](https://hipace.readthedocs.io/en/latest/run/get_started.html) section, to prepare an input file that suits your simulation needs. After setting up your input file (which I have an example of [here](https://github.com/leahghartman/hipaceutils/blob/main/decks/plasma-prof)), modify the example job script below and use it to submit a simulation.
 
-```
+```bash
 #!/bin/bash
 
 #SBATCH --partition=aa100
@@ -184,11 +184,11 @@ You can get familiar with the HiPACE++ input file format in the official documen
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
 #SBATCH --gres=gpu:1
-#SBATCH --mail-user=leah.ghartman@gmail.com
+#SBATCH --mail-user=<yourid>@colorado.edu
 
 # path to executable and input script
-EXE=/projects/leha2242/software/hipace/build/bin/hipace
-INPUTS=inputs_normalized
+EXE=/path/to/hipace/executable
+INPUTS=/path/to/input/file
 
 # GPU-aware MPI
 export MPICH_GPU_SUPPORT_ENABLED=1
@@ -199,3 +199,6 @@ export CUDA_VISIBLE_DEVICES=$SLURM_LOCALID
 # run everything
 srun ${EXE} ${INPUTS}
 ```
+
+Note that this example simulation runs on 2 GPUs, since ``` --nodes=2 ``` and ``` --gres=gpu:1 ``` yields two nodes with one GPU each.
+
